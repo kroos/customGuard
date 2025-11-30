@@ -22,22 +22,17 @@ class AuthenticatedSessionController extends Controller
 	/**
 	 * Handle an incoming authentication request.
 	 */
-	// public function store(LoginRequest $request): RedirectResponse
-	// {
-	// 	$guard = $request->login_type === 'staff' ? 'staff' : 'student';
-	// 	if($request->authenticate()){
-	// 		$request->session()->regenerate();
-	// 		return $guard === 'staff'
-	// 		? redirect()->intended(route('staff.dashboard'))
-	// 		: redirect()->intended(route('student.dashboard'));
-	// 	}
-
-	// 	// return redirect()->intended(route('dashboard', absolute: false));
-	// 	return back()->with('error', 'Invalid credentials');
-	// }
-
 	public function store(LoginRequest $request): RedirectResponse
 	{
+		$request->validate([
+				'username' => ['required', 'string'],
+				'password' => ['required', 'string'],
+				'login_type' =>['required', 'in:staff,student'],
+			],[],[
+				'username' => 'Username',
+				'password' => 'Password',
+				'login_type' => 'Login Type',
+			]);
 		$guard = $request->login_type === 'staff' ? 'staff' : 'student';
 
 		$credentials = $request->only('username', 'password');
