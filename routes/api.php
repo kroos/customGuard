@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Http\Controllers\API\ModelAjaxSupportController;
 
-Route::middleware(['userauth'/*, 'auth:sanctum'*/])->group(function () {
+Route::middleware(['userauth', 'auth:sanctum'])->group(function () {
 	Route::controller(ModelAjaxSupportController::class)->group(function () {
 		Route::get('/getActivityLogs', 'getActivityLogs')->name('getActivityLogs');
 		Route::get('/getYesNoOptions', 'getYesNoOptions')->name('getYesNoOptions');

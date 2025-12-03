@@ -33,19 +33,20 @@ Route::middleware(['userauth'])->group(function () {
 
 
 // DASHBOARD ROUTES
-	Route::middleware(['auth.staff', 'authverified'])->group(function () {
-		Route::get('/staff/dashboard', fn() => view('staff.dashboard'));
-
-
-	});
-
-	Route::middleware(['auth.student', 'authverified'])->group(function () {
+Route::middleware(['auth.staff', 'authverified'])->group(function () {
+	Route::middleware(['password.confirm'])->group(function () {
 		Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
 			Route::get('/', [ActivityLogController::class, 'index'])->name('index');
 			Route::get('/{log}', [ActivityLogController::class, 'show'])->name('show');
 			Route::delete('/{log}', [ActivityLogController::class, 'destroy'])->name('destroy');
 		});
+	});
 
-		Route::get('/student/dashboard', fn() => view('student.dashboard'));
+	Route::get('/staff/dashboard', fn() => view('staff.dashboard'));
+
+});
+
+Route::middleware(['auth.student', 'authverified'])->group(function () {
+	Route::get('/student/dashboard', fn() => view('student.dashboard'));
 
 });
