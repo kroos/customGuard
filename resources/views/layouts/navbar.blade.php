@@ -8,9 +8,9 @@
 			@if(auth('student')->check())
 				href="{{ url('student/dashboard') }}"
 			@endif
-			@guest
+			@if(!(auth('student')->check() || auth('staff')->check()))
 				href="{{ url('/') }}"
-			@endguest
+			@endif
 		>
 			{!! config('app.name') !!}<img src="">
 		</a>
@@ -53,8 +53,8 @@
 									@csrf
 									<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fas fa-light fa-right-from-bracket"></i> Log Out</a>
 								</form>
-							</ul>
-								</li>
+							</li>
+						</ul>
 					</div>
 				@endif
 
@@ -88,8 +88,8 @@
 										<i class="fas fa-light fa-right-from-bracket"></i> Log Out
 									</a>
 								</form>
-							</ul>
-								</li>
+							</li>
+						</ul>
 					</div>
 				@endif
 
