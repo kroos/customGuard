@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
 											$middleware->alias([
 												'auth.staff' => \App\Http\Middleware\AuthenticateStaff::class,
 												'auth.student' => \App\Http\Middleware\AuthenticateStudent::class,
+												'noauth' => \App\Http\Middleware\NoAuth::class,
+												'userauth' => \App\Http\Middleware\Auth::class,
+												'authverified' => \App\Http\Middleware\AuthVerified::class,
 											]);
 										})
 										->withExceptions(function (Exceptions $exceptions): void {

@@ -12,16 +12,13 @@
 			<div class="card-body">
 				<div class="form-group row m-2 @error('login_type') has-error @enderror">
 					<label class="col-sm-4 col-form-label col-form-label-sm">Login Type : </label>
-					<div class="col-sm-8 my-auto form-check @error('login_type') is-invalid @enderror">
-						<label for="staff" class="form-check-label m-1">
-							<input type="radio" name="login_type" id="staff" value="staff" class="form-check-input mx-1 @error('login_type') is-invalid @enderror" {{ (old('login_type') === 'staff')?'checked':NULL }}>
-							Staff
-						</label>
-						<label for="student" class="form-check-label m-1">
-							<input type="radio" name="login_type" id="student" value="student" class="form-check-input mx-1 @error('login_type') is-invalid @enderror" {{ (old('login_type') === 'student')?'checked':NULL }}>
-							Student
-						</label>
-
+					<div class="col-sm-8 my-auto form-check ">
+						<div class="btn-group @error('login_type') is-invalid @enderror" role="group" aria-label="Basic radio toggle button group">
+							<input type="radio" name="login_type" value="staff" id="btnradio1" class="btn-check @error('login_type') is-invalid @enderror" {{ (old('login_type') === 'staff')?'checked':NULL }}>
+							<label class="btn btn-sm btn-outline-primary" for="btnradio1">Staff</label>
+							<input type="radio" name="login_type" value="student" id="btnradio2" class="btn-check @error('login_type') is-invalid @enderror" {{ (old('login_type') === 'student')?'checked':NULL }}>
+							<label class="btn btn-sm btn-outline-primary" for="btnradio2">Student</label>
+						</div>
 						@error('login_type') <div class="invalid-feedback fw-lighter">{{ $message }}</div> @enderror
 					</div>
 				</div>

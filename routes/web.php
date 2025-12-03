@@ -7,7 +7,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::middleware('guest')->group(function () {
+// Route::middleware('guest')->group(function () {
+Route::middleware('noauth')->group(function () {
 	Route::get('/', function () {
 		return view('welcome');
 	});
@@ -50,9 +51,7 @@ Route::middleware('guest')->group(function () {
 			]);
 		return redirect()->back()->with('success', 'Successfully submitted form');
 	})->name('welcome');
-});
 
-Route::middleware('guest')->group(function () {
 	Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 	Route::post('register', [RegisteredUserController::class, 'store']);
 	Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');

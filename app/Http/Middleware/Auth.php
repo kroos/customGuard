@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthenticateStudent
+class Auth
 {
 	/**
 	 * Handle an incoming request.
@@ -15,10 +15,15 @@ class AuthenticateStudent
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		if (!auth('student')->check()) {
-			return redirect('/login')->with('error', 'Please login as student');
+		// if ((auth('staff')->check() || auth('student')->check())) {
+		// 	return $next($request);
+		// }
+		foreach (['staff', 'student'] as $guard) {
+			if (auth($guard)->check()) {
+				auth()->shouldUse($guard);
+				return $next($request);
+			}
 		}
-		return $next($request);
-		// return abort(401);
+		return redirect('/login')->with('danger', 'Please login');
 	}
 }

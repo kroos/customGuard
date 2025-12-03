@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+// use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Requests\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+
+use App\Helpers\UserGuardHelper;
 
 class VerifyEmailController extends Controller
 {
@@ -14,14 +17,14 @@ class VerifyEmailController extends Controller
 	*/
 	public function __invoke(EmailVerificationRequest $request): RedirectResponse
 	{
-		if ($request->user()->hasVerifiedEmail()) {
-			return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+		if (UserGuardHelper::auth_user()->hasVerifiedEmail()) {
+			return redirect()->intended(url(UserGuardHelper::auth_guard().'/dashboard').'?verified=1');
 		}
 
-		if ($request->user()->markEmailAsVerified()) {
-			event(new Verified($request->user()));
+		if (UserGuardHelper::auth_user()->markEmailAsVerified()) {
+			event(new Verified(UserGuardHelper::auth_user()));
 		}
 
-		return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+		return redirect()->intended(url(UserGuardHelper::auth_guard().'/dashboard').'?verified=1');
 	}
 }

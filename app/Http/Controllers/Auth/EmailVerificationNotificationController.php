@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+use App\Helpers\UserGuardHelper;
+
 class EmailVerificationNotificationController extends Controller
 {
     /**
@@ -13,11 +15,11 @@ class EmailVerificationNotificationController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false));
+        if (UserGuardHelper::auth_user()->hasVerifiedEmail()) {
+            return redirect()->intended(url(UserGuardHelper::auth_guard().'/dashboard', absolute: false));
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        UserGuardHelper::auth_user()->sendEmailVerificationNotification();
 
         return back()->with('status', 'verification-link-sent');
     }

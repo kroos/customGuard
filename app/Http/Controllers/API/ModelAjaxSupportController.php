@@ -56,8 +56,8 @@ class ModelAjaxSupportController extends Controller
 	// this 1 need chunks sooner or later
 	public function getActivityLogs(Request $request): JsonResponse
 	{
-		$values = ActivityLog::with('belongstouser')
-											->when($request->search, function(Builder $query) use ($request){
+		$values = ActivityLog::/*with('belongstouser')
+											->*/when($request->search, function(Builder $query) use ($request){
 												$query->where('model_type','LIKE','%'.$request->search.'%')
 												->orWhere('ip_address','LIKE','%'.$request->search.'%');
 											})
@@ -71,10 +71,19 @@ class ModelAjaxSupportController extends Controller
 
 	public function getYesNoOptions(Request $request): JsonResponse
 	{
+												// select2 searching
 		$yno = YesNoOption::when($request->search, function (Builder $query) use ($request) {
-						$query->where('option', 'LIKE', '%' . $request->search . '%');
-					})
-					->get();
+													$query->where('option', 'LIKE', '%' . $request->search . '%');
+												})
+												// for id (especially for old() value)
+												->when($request->id, function (Builder $query) use ($request) {
+													$query->where('id', $request->id);
+												})
+												// no duplication for multi dynamic input
+												->when($request->idIN, function (Builder $query) use ($request) {
+													$query->whereNotIn('id', $request->idIN);
+												})
+												->get();
 		return response()->json($yno);
 	}
 

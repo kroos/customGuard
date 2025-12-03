@@ -14,20 +14,14 @@ use App\Http\Controllers\System\ActivityLogController;
 
 use Illuminate\Support\Facades\Route;
 
-// Route::middleware(['auth', 'verified'])->group(function () {
-// 	Route::get('/dashboard', function(){
-// 		return view('dashboard');
-// 	})->name('dashboard');
-// });
+Route::middleware(['userauth'])->group(function () {
+	Route::middleware(['password.confirm'])->group(function () {
+		Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+		Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+		Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::middleware(['auth', 'password.confirm'])->group(function () {
-	Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-	Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-	Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+	});
 
-// Route::middleware(/'auth')->group(function () {
-Route::middleware(['auth.student', 'auth.staff'])->group(function () {
 	Route::get('verify-email', EmailVerificationPromptController::class)->name('verification.notice');
 	Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 	Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])->middleware('throttle:6,1')->name('verification.send');
@@ -37,18 +31,21 @@ Route::middleware(['auth.student', 'auth.staff'])->group(function () {
 	Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
-	Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
-		Route::get('/', [ActivityLogController::class, 'index'])->name('index');
-		Route::get('/{log}', [ActivityLogController::class, 'show'])->name('show');
-		Route::delete('/{log}', [ActivityLogController::class, 'destroy'])->name('destroy');
-	})/*->middleware(['auth', 'role:owner'])*/;
-
 
 // DASHBOARD ROUTES
-	Route::middleware(['auth.staff'])->group(function () {
+	Route::middleware(['auth.staff', 'authverified'])->group(function () {
 		Route::get('/staff/dashboard', fn() => view('staff.dashboard'));
+
+
 	});
 
-	Route::middleware(['auth.student'])->group(function () {
+	Route::middleware(['auth.student', 'authverified'])->group(function () {
+		Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
+			Route::get('/', [ActivityLogController::class, 'index'])->name('index');
+			Route::get('/{log}', [ActivityLogController::class, 'show'])->name('show');
+			Route::delete('/{log}', [ActivityLogController::class, 'destroy'])->name('destroy');
+		});
+
 		Route::get('/student/dashboard', fn() => view('student.dashboard'));
-	});
+
+});

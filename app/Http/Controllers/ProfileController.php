@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Helpers\UserGuardHelper;
 
 class ProfileController extends Controller
 {
@@ -16,9 +17,10 @@ class ProfileController extends Controller
 	*/
 	public function edit(Request $request): View
 	{
+		$user = UserGuardHelper::auth_user();
+		$relate = UserGuardHelper::auth_guard() == 'staff'?$user->belongstouser:$user->belongstostudent;
 		return view('profile.edit', [
-			// 'user' => $request->user(),
-			'user' => $request->user()->belongstouser,
+			'user' => $relate,
 		]);
 	}
 
@@ -27,21 +29,16 @@ class ProfileController extends Controller
 	*/
 	public function update(ProfileUpdateRequest $request): RedirectResponse
 	{
-		// $request->user()->fill($request->validated());
+		$user = UserGuardHelper::auth_user();
+		$relate = UserGuardHelper::auth_guard() == 'staff'?$user->belongstouser:$user->belongstostudent;
 
-		// if ($request->user()->isDirty('email')) {
-		// 	$request->user()->email_verified_at = null;
-		// }
+		$relate->fill($request->validated());
 
-		// $request->user()->belongstouser()->save();
-
-		$request->user()->belongstouser->fill($request->validated());
-
-		if ($request->user()->belongstouser->isDirty('email')) {
-			$request->user()->belongstouser->email_verified_at = null;
+		if ($relate->isDirty('email')) {
+			$relate->email_verified_at = null;
 		}
 
-		$request->user()->belongstouser->save();
+		$relate->save();
 
 		return Redirect::route('profile.edit')->with('status', 'profile-updated');
 	}
@@ -51,14 +48,13 @@ class ProfileController extends Controller
 	*/
 	public function destroy(Request $request): RedirectResponse
 	{
+		$user = UserGuardHelper::auth_user();
+		$relate = UserGuardHelper::auth_guard() == 'staff'?$user->belongstouser:$user->belongstostudent;
+
 		$request->validateWithBag('userDeletion', [
 			'password' => ['required', 'current_password'],
 		]);
-
-		$user = $request->user();
-
 		Auth::logout();
-
 		$user->delete();
 		// $user->belongstouser->delete();
 

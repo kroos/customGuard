@@ -9,43 +9,39 @@
 	@endif
 
 	<div class="col-sm-12 row mx-auto justify-content-center">
-		<div class="col-sm-4">
-			<form method="POST" action="{{ route('verification.send') }}" id="form" class="needs-validation">
-				@csrf
 				<div class="card">
 					<div class="card-header">
 						Verification Link Request
 					</div>
 					<div class="card-body">
-						<div class="col-sm-12 d-flex flex-column align-items-center justify-content-center">
-							<h6>Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.</h6>
+						<form method="POST" action="{{ route('verification.send') }}" id="form" class="needs-validation">
+							@csrf
+							<div class="col-sm-12 d-flex flex-column align-items-center justify-content-center">
+								<h6>Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.</h6>
 					</div>
-					<div class="card-footer">
-						<div class="col-sm-12 text-end">
-							<button type="submit" class="btn btn-sm btn-primary m-3">
+					<div class="card-footer row  justify-content-center">
+
+						<div class="col-sm-4">
+							<button type="submit" class="btn btn-sm btn-primary m-0">
 								{{ __('Resend Verification Email') }}
 							</button>
 						</div>
+					</form>
+						<div class="col-sm-4">
+							<form method="POST" action="{{ route('logout') }}" id="form" class="needs-validation">
+								@csrf
+								<div class="col-sm-12 text-start">
+									<button type="submit" class="btn btn-sm btn-primary m-0">
+										{{ __('Log Out') }}
+									</button>
+								</div>
+							</form>
+						</div>
+
 					</div>
 				</div>
 
 
-
-
-
-			</form>
-		</div>
-
-		<div class="col-sm-4">
-			<form method="POST" action="{{ route('logout') }}" id="form" class="needs-validation">
-				@csrf
-				<div class="col-sm-12 text-start">
-					<button type="submit" class="btn btn-sm btn-primary m-3">
-						{{ __('Log Out') }}
-					</button>
-				</div>
-			</form>
-		</div>
 	</div>
 
 </div>

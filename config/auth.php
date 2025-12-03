@@ -15,7 +15,7 @@ return [
 
 	'defaults' => [
 		'guard' => env('AUTH_GUARD', 'staff'),
-		'passwords' => env('AUTH_PASSWORD_BROKER', 'logins'),
+		'passwords' => env('AUTH_PASSWORD_BROKER', 'staff'),
 	],
 
 	/*
@@ -110,13 +110,13 @@ return [
 	'passwords' => [
 		// 'users' => [
 		// this should be a table name for *logins*
-		'logins' => [
+		'staff' => [
 			'provider' => 'logins',
 			'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
 			'expire' => 60,
 			'throttle' => 60,
 		],
-		'student_logins' => [
+		'student' => [
 			'provider' => 'student_logins',
 			'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
 			'expire' => 60,

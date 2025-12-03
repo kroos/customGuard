@@ -6,7 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthenticateStudent
+use App\Helpers\UserGuardHelper;
+
+class AuthVerified
 {
 	/**
 	 * Handle an incoming request.
@@ -15,10 +17,14 @@ class AuthenticateStudent
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		if (!auth('student')->check()) {
-			return redirect('/login')->with('error', 'Please login as student');
+		$user = UserGuardHelper::auth_user();
+
+		if (!$user || !$user->hasVerifiedEmail()) {
+			return $request->expectsJson()
+			? abort(403, 'Your email is not verified.')
+			: redirect()->route('verification.notice');
 		}
+
 		return $next($request);
-		// return abort(401);
 	}
 }
