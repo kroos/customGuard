@@ -41,7 +41,6 @@ Route::middleware(['auth.staff', 'authverified'])->group(function () {
 			Route::delete('/{log}', [ActivityLogController::class, 'destroy'])->name('destroy');
 		});
 	});
-
 	Route::get('/staff/dashboard', fn() => view('staff.dashboard'));
 
 });

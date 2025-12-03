@@ -56,11 +56,6 @@ class ActivityLog extends Model
 
 	public function belongstostudent(): BelongsTo
 	{
-		return $this->belongsTo(\App\Models\Student::class, 'student_id');
-	}
-
-	public function model()
-	{
-		return $this->morphTo();
+		return $this->belongsTo(\App\Models\Student::class, 'user_id');
 	}
 }

@@ -56,8 +56,8 @@ class ModelAjaxSupportController extends Controller
 	// this 1 need chunks sooner or later
 	public function getActivityLogs(Request $request): JsonResponse
 	{
-		$values = ActivityLog::/*with('belongstouser')
-											->*/when($request->search, function(Builder $query) use ($request){
+		$values = ActivityLog::with(['belongstouser', 'belongstostudent'])
+											->when($request->search, function(Builder $query) use ($request){
 												$query->where('model_type','LIKE','%'.$request->search.'%')
 												->orWhere('ip_address','LIKE','%'.$request->search.'%');
 											})

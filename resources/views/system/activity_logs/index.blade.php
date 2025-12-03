@@ -41,7 +41,19 @@ $('#logs-table').DataTable({
 				return `${modelName}${modelId}`;
 			}
 		},
-		{ data:'belongstouser.name', title:'User', defaultContent: 'System' },
+		{
+			data: null,
+			title:'User',
+			defaultContent: 'System',
+			render: function (data, type, row) {
+				if(row.guard == 'staff'){
+					return row.belongstouser.name;
+				}
+				if(row.guard == 'student'){
+					return row.belongstostudent.name;
+				}
+			}
+		},
 		{ data:'ip_address', title:'IP Address' },
 		{ data:'created_at', title:'Timestamp', render: data => moment(data).format('D MMM YYYY h:mm a') },
 		{

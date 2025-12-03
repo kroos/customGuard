@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\UserGuardHelper;
 
 trait Auditable
 {
@@ -131,7 +132,7 @@ trait Auditable
 			try { $req = Request::instance(); } catch (\Throwable) {}
 
 			ActivityLog::create([
-				'user_id'     => Auth::id(),
+				'user_id'     => UserGuardHelper::auth_user()->id,
 				'event'       => $event,
 				'model_type'  => static::class,
 				'model_id'    => $this->getKey(),
@@ -140,7 +141,7 @@ trait Auditable
 				'url'         => $req?->fullUrl(),
 				'ip_address'  => $req?->ip(),
 				'user_agent'  => $req?->header('User-Agent'),
-				'guard'       => auth()->getDefaultDriver() ?? null,
+				'guard'       => UserGuardHelper::auth_guard(),
 				'is_critical' => $this->isEventCritical($event),
 				'description' => sprintf('%s %s (%s)',
 					class_basename(static::class),
