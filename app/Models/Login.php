@@ -81,16 +81,16 @@ class Login extends Authenticatable implements MustVerifyEmail
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// no need this anymore cause we choose "logins" for auth, not "users" table anymore. config/auth.php
-	public function getAuthIdentifierName()
-	{
-		return 'username';
-	}
+	// public function getAuthIdentifierName()
+	// {
+	// 	return 'username';
+	// }
 
 	// for password
-	public function getAuthPassword()
-	{
-		return $this->password;
-	}
+	// public function getAuthPassword()
+	// {
+	// 	return $this->password;
+	// }
 
 	// custom email reset password in
 	// https://laracasts.com/discuss/channels/laravel/how-to-override-the-tomail-function-in-illuminateauthnotificationsresetpasswordphp
