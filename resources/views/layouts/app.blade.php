@@ -21,7 +21,7 @@ $currentYear = Carbon::now()->year;
 	@vite(['resources/scss/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
 
 	<!-- Bootswatch Cerulean CSS -->
-	<link href="{{ URL::asset('css/bootstrap.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
 	<!-- Livewire CSS -->
 
 </head>
