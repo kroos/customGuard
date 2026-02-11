@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 Route::middleware('noauth')->group(function () {
 	Route::get('/', function () {
 		return view('welcome');
-	});
+	})->name('welcome');
 
 	Route::post('/', function (Request $request) {
 		// dd($request->all());
